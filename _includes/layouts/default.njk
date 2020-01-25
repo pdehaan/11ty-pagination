@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>{{ (renderData.title or title) | safe }}</title>
+  <style>
+    nav .previous-page,
+    nav .current-page,
+    nav .next-page {
+      padding: 20px;
+    }
+
+    .verse {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+{{ content | safe }}
+
+</body>
+</html>

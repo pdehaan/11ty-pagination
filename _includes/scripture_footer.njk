@@ -1,0 +1,13 @@
+<footer>
+  <nav>
+    {%- if pagination.href.previous -%}
+    <a href="{{ pagination.href.previous }}" class="previous-page">&lsaquo; {{ title }} <small>{{ pagination.page.previous }}</small></a>
+    {%- endif -%}
+
+    <span class="current-page">{{ title }} <small>{{ chapter }}</small></span>
+
+    {%- if pagination.href.next -%}
+    <a href="{{ pagination.href.next }}" class="next-page">{{ title }} <small>{{ pagination.page.next }}</small> &rsaquo;</a>
+    {%- endif -%}
+  </nav>
+</footer>

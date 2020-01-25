@@ -1,0 +1,7 @@
+{
+  "layout": "layouts/scripture.njk",
+  "permalink": "scriptures/{{ title | slug }}/{{ chapter }}/",
+  "renderData": {
+    "title": "{{ title }} &mdash; {{ chapter }}"
+  }
+}

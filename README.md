@@ -27,3 +27,49 @@ Also note that the bible-api.com requests fetch an entire BOOK in one request, a
 I did randomly find https://github.com/thiagobodruk/bible/blob/master/json/en_kjv.json, which might work, but possibly also needs a bit of data fiddling to use it as a collection or _data/ file to suit your requirements (and it's a 4.34 MB JSON blob, so processing might be slow -- although still much faster than any network requests).
 
 Since all the files in the ./scriptures/\*.njk currently look exactly the same (except for the frontmatter `title` and `pagination.data` collection name, I added a script which reads the _data/old-testament.js file and generates all the ./scriptures/\*.njk files based on a template (but aggressively overwrites the ./scriptures/\*.njk files, so use cautiously).
+
+Here's a copy of the current ./scriptures/1-samuel.njk template:
+
+```md
+---
+title: 1 Samuel
+pagination:
+  data: collections.1-Samuel
+  size: 1
+  alias: chapter
+---
+
+{%- fetchBook title, chapter -%}
+```
+
+There are a few repetitive frontmatter values (`layout`, `permalink`, etc) that are found in the ./scriptures/scriptures.json file to try and keep the individual .njk files as _lean_ as possible:
+
+```json
+{
+  "layout": "layouts/scripture.njk",
+  "permalink": "scriptures/{{ title | slug }}/{{ chapter }}/",
+  "renderData": {
+    "title": "{{ title }} &mdash; {{ chapter }}"
+  }
+}
+```
+
+So, the "pagination magic" happens in the collections. Note in the snippet above we're using `collections.1-Samuel`. The collections are all defined in the .eleventy file in the `loadScriptures()` method:
+
+```js
+function loadScriptures(dir, config) {
+  const scriptureMap = require(`./_data/${dir}`);
+  for (const book of scriptureMap.keys()) {
+    const collectionName = slugify(book);
+    const chapters = scriptureMap.get(book);
+    config.addCollection(collectionName, () => indexedArray(chapters));
+  }
+}
+
+function indexedArray(len, start=1) {
+  const arr = Array.apply(null, Array(len));
+  return arr.map((_, idx) => idx + start);
+}
+```
+
+Currently, we're loading the data file from "_data/old-testament.js" and looping over the Map object and converting `["1 Samuel", 31]` to `config.addCollection("1-Samuel", [1, 2, 3, ..., 31])` (where we loop over the chapter array using pagination to generate the individual pages). Also worth noting is how we "slugify" the collection name to accomodate for collection names with spaces.

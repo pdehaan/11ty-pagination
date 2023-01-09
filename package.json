@@ -13,7 +13,7 @@
   "author": "Peter deHaan",
   "license": "MPL-2.0",
   "devDependencies": {
-    "@11ty/eleventy": "^0.10.0",
+    "@11ty/eleventy": "^1.0.2",
     "axios": "^0.21.1",
     "rimraf": "^3.0.0",
     "slugify": "^1.3.6"
